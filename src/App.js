@@ -36,15 +36,26 @@ class App extends Component {
 
   componentDidMount() {
     const { searchTerm } = this.state;
+    this.fetchSearchTopStories(searchTerm);
+  }
+
+  setSearchTopStories = (result) => {
+    this.setState({result,})
+  }
+
+  onSearchSubmit = (event) => {
+    const { searchTerm } = this.state;
+    this.fetchSearchTopStories(searchTerm);
+    event.preventDefault();
+  }
+
+  fetchSearchTopStories(searchTerm) {
     fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
       .then(response => response.json())
       .then(result => this.setSearchTopStories(result))
       .catch(error => error);
   }
 
-  setSearchTopStories = (result) => {
-    this.setState({result,})
-  }
 
   onDismiss = (id) => () => {
     const isNotId = item => item.objectID !== id;
@@ -69,37 +80,42 @@ class App extends Component {
         <Search
           value={searchTerm}
           onChange={this.onSearchChange}
+          onSubmit={this.onSearchSubmit}
         >
           Search
         </Search>
         {result &&
           <Table
             list={result.hits}
-            pattern={searchTerm}
             onDismiss={this.onDismiss}
           />
         }
-
       </div>
     );
   }
 }
 
-const Search = ({ value, onChange, children }) => {
-  return (
-    <form>
-      {children} <input
-        type="text"
-        value={value}
-        onChange={onChange}
-      />
-    </form>
-  );
-}
+const Search = ({
+  value,
+  onChange,
+  onSubmit,
+  children
+}) => (
+  <form onSubmit={onSubmit}>
+    <input
+      type="text"
+      value={value}
+      onChange={onChange}
+    />
+    <button type="submit">
+      {children}
+    </button>
+  </form>
+)
 
-const Table = ({ list, pattern, isSearched, onDismiss }) =>
+const Table = ({ list, onDismiss }) =>
   <div className="table">
-    {list.filter(isSearched(pattern)).map(item =>
+    {list.map(item =>
       <div key={item.objectID} className="table-row">
         <span>
           <a href={item.url}>{item.title}</a>
