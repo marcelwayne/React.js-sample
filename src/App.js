@@ -72,12 +72,14 @@ class App extends Component {
         >
           Search
         </Search>
-        <Table
-          list={result.hits}
-          pattern={searchTerm}
-          isSearched={this.isSearched}
-          onDismiss={this.onDismisss}
-        />
+        {result &&
+          <Table
+            list={result.hits}
+            pattern={searchTerm}
+            onDismiss={this.onDismiss}
+          />
+        }
+
       </div>
     );
   }
