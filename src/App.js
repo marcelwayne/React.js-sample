@@ -13,6 +13,7 @@ class App extends Component {
     this.state = {
       result: null,
       searchTerm: DEFAULT_QUERY,
+      error: null, 
     };
   }
 
@@ -38,7 +39,7 @@ class App extends Component {
     fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}\ ${page}`)
       .then(response => response.json())
       .then(result => this.setSearchTopStories(result))
-      .catch(error => error);
+      .catch(error => this.setState({ error }));
   }
 
   onDismiss = (id) => () => {
@@ -57,7 +58,7 @@ class App extends Component {
     item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
   render() {
-    const { result, searchTerm } = this.state;
+    const { result, searchTerm, error } = this.state;
     const page = (result && result.page) || 0;
 
     if (!result) { return null; }
