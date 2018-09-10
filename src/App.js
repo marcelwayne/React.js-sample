@@ -62,6 +62,8 @@ class App extends Component {
     const page = (result && result.page) || 0;
 
     if (!result) { return null; }
+    if (error) { return <p>Something went wrong.</p>; }
+
     return (
       <div className="App">
         <Search
@@ -71,11 +73,11 @@ class App extends Component {
         >
           Search
         </Search>
-        {result &&
-          <Table
-            list={result.hits}
-            onDismiss={this.onDismiss}
-          />
+        {error ?
+          <div className="interactions">
+            <p>Something went wrong.</p>
+          </div> :
+          <Table list={list} onDismiss={this.onDismiss} />
         }
         <div className="interactions">
           <Button onClick={() => this.fetchSearchTopStories(searchTerm, page + 1)}>
