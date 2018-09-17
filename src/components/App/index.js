@@ -53,7 +53,6 @@ class App extends Component {
     axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       .then(result => this._isMounted && this.setSearchTopStories(result.data))
       .catch(error => this._isMounted && this.setState({ error }));
-
   }
 
   onDismiss = (id) => () => {
@@ -67,9 +66,6 @@ class App extends Component {
   onSearchChange = (event) => {
     this.setState({ searchTerm: event.target.value });
   }
-
-  isSearched = searchTerm => item =>
-    item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
   render() {
     const { result, searchTerm, error } = this.state;
